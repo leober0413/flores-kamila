@@ -115,60 +115,41 @@ const prefersReducedMotion =
   ];
 
   const container = document.getElementById('photo-bg');
-  const MAX_ACTIVE = 3;
-  let active = 0;
+  let photoIndex  = 0; /* cycle through all photos in order */
 
   function spawn() {
-    if (active >= MAX_ACTIVE) return;
-    active++;
-
-    const img = document.createElement('img');
+    const img  = document.createElement('img');
     img.className = 'floating-photo';
-    /* Try a random photo; on error silently skip */
-    img.src = PHOTOS[Math.floor(Math.random() * PHOTOS.length)];
-    img.onerror  = () => { img.remove(); active--; };
-    img.onremove = () => { active--; };
+    img.src = PHOTOS[photoIndex % PHOTOS.length];
+    photoIndex++;
 
     const vw   = window.innerWidth;
     const vh   = window.innerHeight;
-    const size = 160 + Math.random() * 100;     /* 160–260 px */
-    const dur  = 18 + Math.random() * 6;        /* 7–13 s */
-    const rot  = (Math.random() - 0.5) * 20;   /* –10° to +10° */
-    const peak = '0.90';
-
-    /* Start: bottom edge, random horizontal */
-    const startX = Math.random() * (vw - size);
-    const startY = vh + size * 0.5;
-
-    /* Drift: float upward + gentle horizontal sway */
-    const tx = (Math.random() - 0.5) * 140;
-    const ty = -(vh + size * 1.5);
+    const size = 150 + Math.random() * 90;      /* 150–240 px */
+    const dur  = 9 + Math.random() * 4;         /* 9–13 s */
+    const rot  = (Math.random() - 0.5) * 18;
+    const tx   = (Math.random() - 0.5) * 100;
+    const ty   = -(vh + size * 1.5);
 
     img.style.cssText = `
-      width:${size}px;
-      height:${size}px;
-      left:${startX}px;
-      top:${startY}px;
-      --rot:${rot}deg;
-      --tx:${tx}px;
-      --ty:${ty}px;
-      --peak-opacity:${peak};
+      width:${size}px; height:${size}px;
+      left:${Math.random() * (vw - size)}px;
+      top:${vh + size * 0.5}px;
+      --rot:${rot}deg; --tx:${tx}px; --ty:${ty}px;
+      --peak-opacity:0.90;
       animation-duration:${dur}s;
     `;
 
-    img.addEventListener('animationend', () => {
-      img.remove();
-      active--;
-    });
+    /* On end or error: remove then immediately start next */
+    const next = () => { img.remove(); spawn(); };
+    img.addEventListener('animationend', next);
+    img.onerror = next;
 
     container.appendChild(img);
   }
 
-  /* Stagger initial spawns then keep cycling */
-  setTimeout(() => {
-    for (let i = 0; i < 3; i++) setTimeout(spawn, i * 800);
-    setInterval(spawn, 5000);
-  }, 2000);
+  /* Start the chain after 1.5s */
+  setTimeout(spawn, 1500);
 })();
 
 
