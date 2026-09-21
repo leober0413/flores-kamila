@@ -115,7 +115,7 @@ const prefersReducedMotion =
   ];
 
   const container = document.getElementById('photo-bg');
-  const MAX_ACTIVE = 10;
+  const MAX_ACTIVE = 4;
   let active = 0;
 
   function spawn() {
