@@ -115,7 +115,7 @@ const prefersReducedMotion =
   ];
 
   const container = document.getElementById('photo-bg');
-  const MAX_ACTIVE = 2;
+  const MAX_ACTIVE = 1;
   let active = 0;
 
   function spawn() {
@@ -167,7 +167,7 @@ const prefersReducedMotion =
   /* Stagger initial spawns then keep cycling */
   setTimeout(() => {
     spawn();
-    setInterval(spawn, 3500);
+    setInterval(spawn, 6000);
   }, 2000);
 })();
 
