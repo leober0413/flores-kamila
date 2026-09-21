@@ -140,12 +140,13 @@ const prefersReducedMotion =
       animation-duration:${dur}s;
     `;
 
-    /* On end or error: remove then immediately start next */
-    const next = () => { img.remove(); spawn(); };
-    img.addEventListener('animationend', next);
-    img.onerror = next;
+    img.addEventListener('animationend', () => img.remove());
+    img.onerror = () => { img.remove(); spawn(); };
 
     container.appendChild(img);
+
+    /* Next photo starts just as this one finishes entering (10% of dur) */
+    setTimeout(spawn, dur * 0.10 * 1000);
   }
 
   /* Start the chain after 1.5s */
