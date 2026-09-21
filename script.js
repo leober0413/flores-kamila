@@ -115,7 +115,7 @@ const prefersReducedMotion =
   ];
 
   const container = document.getElementById('photo-bg');
-  const MAX_ACTIVE = 4;
+  const MAX_ACTIVE = 2;
   let active = 0;
 
   function spawn() {
@@ -166,9 +166,8 @@ const prefersReducedMotion =
 
   /* Stagger initial spawns then keep cycling */
   setTimeout(() => {
-    /* Seed several at once to fill screen immediately */
-    for (let i = 0; i < 5; i++) setTimeout(spawn, i * 400);
-    setInterval(spawn, 1200);
+    spawn();
+    setInterval(spawn, 3500);
   }, 2000);
 })();
 
