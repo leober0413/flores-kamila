@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para Kamila 🌼</title>
+
+  <!-- Open Graph / WhatsApp preview -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:title"       content="Para Kamila 🌼" />
+  <meta property="og:description" content="Sé que estabas esperando esto…" />
+  <meta property="og:image"       content="https://MIUSUARIO.github.io/flores-kamila/assets/preview.jpg" />
+  <meta property="og:url"         content="https://MIUSUARIO.github.io/flores-kamila/" />
+  <meta name="twitter:card"       content="summary_large_image" />
+
+  <!-- Favicon emoji -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌼</text></svg>" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Falling petals canvas (behind everything) -->
+  <canvas id="petals-canvas" aria-hidden="true"></canvas>
+
+  <!-- Floating photos background layer -->
+  <div id="photo-bg" aria-hidden="true"></div>
+
+  <!-- Audio -->
+  <audio id="music" src="assets/cancion.mp3" loop preload="auto"></audio>
+
+  <!-- Music toggle button -->
+  <button id="music-btn" class="music-btn" aria-label="Pausar / reanudar música" hidden>
+    <span class="music-icon">♪</span>
+  </button>
+
+  <!-- ──────────────────────────────────────── -->
+  <!-- PANTALLA 1: Inicio                       -->
+  <!-- ──────────────────────────────────────── -->
+  <section id="screen-1" class="screen active" role="main">
+    <div class="screen-inner">
+      <div class="intro-emoji" aria-hidden="true">🌼</div>
+      <h1 class="title-script intro-title">Kamila…</h1>
+      <p class="intro-subtitle">sé que estabas esperando esto</p>
+      <button id="start-btn" class="btn-main">
+        <span>Toca aquí</span>
+      </button>
+      <p class="volume-hint">🔊 Sube el volumen</p>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────── -->
+  <!-- PANTALLA 2: Las flores florecen          -->
+  <!-- ──────────────────────────────────────── -->
+  <section id="screen-2" class="screen" hidden>
+    <div class="screen-inner">
+      <div id="flowers-container" aria-label="Tres flores amarillas floreciendo" role="img">
+        <!-- Flowers injected by script.js -->
+      </div>
+      <p class="flowers-caption fade-child delay-1">
+        Me las pediste, aunque fueran dibujadas…
+      </p>
+      <p class="flowers-caption-em fade-child delay-2">
+        así que aquí están, hechas por mí 💛
+      </p>
+      <button class="btn-next fade-child delay-3" data-next="3">Siguiente</button>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────── -->
+  <!-- PANTALLA 3: La canción                   -->
+  <!-- ──────────────────────────────────────── -->
+  <section id="screen-3" class="screen" hidden>
+    <div class="screen-inner">
+      <div class="song-wrap">
+        <span class="song-deco" aria-hidden="true">🎵</span>
+        <blockquote class="song-lyrics fade-child delay-1">
+          <!-- FRASE DE LA CANCIÓN -->
+          <em>"Flores amarillas,<br>pa' que te enamores…"</em>
+        </blockquote>
+        <p class="song-source fade-child delay-2">— Floricienta</p>
+      </div>
+      <p class="personal-note fade-child delay-3">
+        Y sí… yo sabía.<br>Porque tú me lo dijiste.
+      </p>
+      <button class="btn-next fade-child delay-4" data-next="4">Siguiente</button>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────── -->
+  <!-- PANTALLA 4: Mi mensaje                   -->
+  <!-- ──────────────────────────────────────── -->
+  <section id="screen-4" class="screen" hidden>
+    <div class="screen-inner">
+      <h2 class="title-script message-title fade-child delay-1">Para ti, Kamila</h2>
+      <div class="message-text fade-child delay-2">
+        <!-- MI MENSAJE -->
+        <p>
+          Cuando me dijiste que querías flores amarillas, aunque fueran dibujadas,
+          guardé eso en mi corazón. No porque fuera una promesa fácil,
+          sino porque era <em>tu</em> ilusión, y eso lo hace todo.
+        </p>
+        <p>
+          Hoy es 21 de septiembre. Las flores amarillas son para ti.
+          Y aunque no pueda darte un ramo de verdad en este momento,
+          quiero que sepas que cada pétalo de estos tiene mi cariño.
+        </p>
+        <p>
+          Para ti, siempre. 💛
+        </p>
+      </div>
+      <button class="btn-next fade-child delay-3" data-next="5">Siguiente</button>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────── -->
+  <!-- PANTALLA 5: Final                        -->
+  <!-- ──────────────────────────────────────── -->
+  <section id="screen-5" class="screen" hidden>
+    <div class="screen-inner">
+      <div class="final-header fade-child delay-1">
+        <div class="final-flowers" aria-hidden="true">🌻🌼🌻</div>
+        <h2 class="title-script final-title">Para ti 💛</h2>
+      </div>
+
+      <div id="reveal-wrap" class="reveal-wrap fade-child delay-2">
+        <button id="reveal-btn" class="btn-reveal">
+          Abrir regalo 💌
+        </button>
+      </div>
+
+      <div id="reveal-content" class="reveal-content" hidden>
+        <div class="reveal-inner fade-child">
+          <!-- Foto opcional: si no existe el archivo, la imagen no se muestra -->
+          <img
+            id="foto"
+            src="assets/foto_real.jpg"
+            alt="Nosotros"
+            class="foto"
+            onerror="this.style.display='none'"
+          />
+          <p class="reveal-message">
+            Feliz Día de la Flor Amarilla, Mi LadyKam. 🌼<br>
+            Este deseo ya fue cumplido — y hay muchos más por cumplir.
+          </p>
+          <p class="reveal-firma title-script">Con todo mi amor, Leober C.S 💛</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>

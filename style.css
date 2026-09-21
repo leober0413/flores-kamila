@@ -1,0 +1,560 @@
+/* ============================================================
+   FLORES AMARILLAS — style.css
+   Mobile-first, no frameworks, GitHub Pages ready
+   ============================================================ */
+
+/* ---------- Design tokens ---------- */
+:root {
+  --yellow:       #F4C430;
+  --yellow-light: #FFF176;
+  --yellow-pale:  #FFFDE7;
+  --gold:         #DAA520;
+  --gold-dark:    #B8860B;
+  --cream:        #FFF8E7;
+  --green:        #4A7C3F;
+  --green-dark:   #2E5426;
+  --brown:        #8B6914;
+  --text:         #4A3800;
+  --text-soft:    #7A6010;
+  --white:        #FFFFFF;
+
+  --font-script: 'Dancing Script', 'Brush Script MT', cursive;
+  --font-body:   'Nunito', 'Segoe UI', sans-serif;
+
+  --ease-bloom:  cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-soft:   cubic-bezier(0.4, 0, 0.2, 1);
+
+  --screen-pad: clamp(1.25rem, 6vw, 2.5rem);
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden; /* screens handle their own scroll */
+}
+
+body {
+  font-family: var(--font-body);
+  background: radial-gradient(ellipse at 50% 0%, #FFF9C4, #FFF3DC 70%);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Canvas (falling petals) ---------- */
+#petals-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---------- Floating photos background ---------- */
+#photo-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.floating-photo {
+  position: absolute;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18),
+              0 0 0 1px rgba(218, 165, 32, 0.2);
+  opacity: 0;
+  animation: photoFloat linear forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes photoFloat {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(var(--rot)) scale(0.82);
+  }
+  10% {
+    opacity: var(--peak-opacity);
+    transform: translate(calc(var(--tx) * 0.08), calc(var(--ty) * 0.08))
+               rotate(var(--rot)) scale(1);
+  }
+  88% {
+    opacity: var(--peak-opacity);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(0.92);
+  }
+}
+
+/* ---------- Music button ---------- */
+.music-btn {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 10;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: rgba(255, 248, 231, 0.9);
+  color: var(--gold-dark);
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 12px rgba(218, 165, 32, 0.3);
+  transition: transform 0.2s var(--ease-soft),
+              background 0.2s var(--ease-soft),
+              opacity 0.4s;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.music-btn:hover {
+  transform: scale(1.1);
+  background: var(--yellow-light);
+}
+
+.music-btn.paused .music-icon::after {
+  content: '⏸';
+  position: absolute;
+}
+
+.music-btn[hidden] {
+  display: none;
+}
+
+/* ---------- Screens ---------- */
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--screen-pad);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  /* Transparent — photos float freely behind content cards */
+  background: transparent;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s var(--ease-soft);
+}
+
+.screen.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.screen[hidden] {
+  display: none !important;
+}
+
+.screen-inner {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  text-align: center;
+  padding: 1.75rem var(--screen-pad) 4rem;
+
+  /* Card that photos pass behind */
+  background: rgba(255, 248, 231, 0.94);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 40px rgba(218, 165, 32, 0.15),
+              0 2px 12px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+/* ---------- Typography ---------- */
+.title-script {
+  font-family: var(--font-script);
+  color: var(--gold-dark);
+  line-height: 1.2;
+}
+
+/* ---------- SCREEN 1: Intro ---------- */
+.intro-emoji {
+  font-size: 4rem;
+  animation: float 3s ease-in-out infinite;
+  display: block;
+  line-height: 1;
+}
+
+.intro-title {
+  font-size: clamp(3rem, 15vw, 4.5rem);
+  text-shadow: 0 2px 8px rgba(218, 165, 32, 0.25);
+  animation: fadeUp 0.8s var(--ease-soft) 0.2s both;
+}
+
+.volume-hint {
+  font-size: 0.82rem;
+  color: var(--text-soft);
+  opacity: 0.7;
+  letter-spacing: 0.03em;
+  animation: fadeUp 0.8s var(--ease-soft) 1s both;
+}
+
+.intro-subtitle {
+  font-size: clamp(1rem, 4.5vw, 1.2rem);
+  font-weight: 300;
+  color: var(--text-soft);
+  letter-spacing: 0.02em;
+  animation: fadeUp 0.8s var(--ease-soft) 0.45s both;
+}
+
+/* ---------- Buttons ---------- */
+.btn-main {
+  margin-top: 1rem;
+  padding: 0.9rem 2.5rem;
+  font-family: var(--font-script);
+  font-size: clamp(1.3rem, 6vw, 1.6rem);
+  color: var(--white);
+  background: linear-gradient(135deg, var(--yellow), var(--gold));
+  border: none;
+  border-radius: 3rem;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(218, 165, 32, 0.45);
+  transition: transform 0.2s var(--ease-bloom),
+              box-shadow 0.2s var(--ease-soft);
+  animation: fadeUp 0.8s var(--ease-soft) 0.7s both;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-main:hover,
+.btn-main:focus-visible {
+  transform: scale(1.05);
+  box-shadow: 0 6px 28px rgba(218, 165, 32, 0.6);
+}
+
+.btn-main:active {
+  transform: scale(0.97);
+}
+
+.btn-next {
+  margin-top: 0.5rem;
+  padding: 0.65rem 2rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+  background: transparent;
+  border: 2px solid var(--gold);
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-next:hover,
+.btn-next:focus-visible {
+  background: var(--yellow-light);
+  transform: scale(1.03);
+}
+
+.btn-next:active {
+  transform: scale(0.96);
+}
+
+/* ---------- SCREEN 2: Flowers ---------- */
+#flowers-container {
+  width: 100%;
+  max-width: 340px;
+}
+
+#flowers-container svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.flowers-caption {
+  font-size: clamp(0.95rem, 4vw, 1.05rem);
+  font-weight: 300;
+  color: var(--text-soft);
+  line-height: 1.6;
+}
+
+.flowers-caption-em {
+  font-family: var(--font-script);
+  font-size: clamp(1.2rem, 5.5vw, 1.5rem);
+  color: var(--gold-dark);
+}
+
+/* ---------- SCREEN 3: Song ---------- */
+.song-wrap {
+  background: rgba(255, 241, 118, 0.3);
+  border-left: 4px solid var(--yellow);
+  border-radius: 0.5rem;
+  padding: 1.25rem 1.5rem;
+  text-align: left;
+  width: 100%;
+}
+
+.song-deco {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.song-lyrics {
+  font-family: var(--font-script);
+  font-size: clamp(1.3rem, 6vw, 1.7rem);
+  color: var(--text);
+  font-style: normal;
+  line-height: 1.5;
+}
+
+.song-source {
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  margin-top: 0.5rem;
+  text-align: right;
+}
+
+.personal-note {
+  font-size: clamp(1rem, 4.5vw, 1.15rem);
+  font-weight: 600;
+  color: var(--gold-dark);
+  line-height: 1.7;
+}
+
+/* ---------- SCREEN 4: Message ---------- */
+.message-title {
+  font-size: clamp(2rem, 10vw, 2.8rem);
+}
+
+.message-text {
+  text-align: center;
+  width: 100%;
+  line-height: 1.75;
+  color: var(--text);
+  font-family: var(--font-script);
+  font-size: clamp(1.15rem, 5vw, 1.4rem);
+}
+
+.message-text p + p {
+  margin-top: 1rem;
+}
+
+.message-text em {
+  font-style: italic;
+  color: var(--gold-dark);
+}
+
+/* ---------- SCREEN 5: Final ---------- */
+.final-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.final-flowers {
+  font-size: 2.5rem;
+  letter-spacing: 0.15em;
+  animation: float 3s ease-in-out infinite;
+}
+
+.final-title {
+  font-size: clamp(2.2rem, 11vw, 3.2rem);
+}
+
+.reveal-wrap {
+  margin-top: 0.5rem;
+}
+
+.btn-reveal {
+  padding: 1rem 2.5rem;
+  font-family: var(--font-script);
+  font-size: clamp(1.3rem, 6vw, 1.6rem);
+  color: var(--white);
+  background: linear-gradient(135deg, #FFD700, var(--gold));
+  border: none;
+  border-radius: 3rem;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(218, 165, 32, 0.5);
+  transition: transform 0.2s var(--ease-bloom),
+              box-shadow 0.2s,
+              opacity 0.3s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-reveal:hover,
+.btn-reveal:focus-visible {
+  transform: scale(1.05);
+  box-shadow: 0 6px 32px rgba(218, 165, 32, 0.65);
+}
+
+.btn-reveal:active {
+  transform: scale(0.97);
+}
+
+.reveal-content[hidden] {
+  display: none !important;
+}
+
+.reveal-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.foto {
+  width: 100%;
+  max-width: 280px;
+  border-radius: 1rem;
+  border: 3px solid var(--yellow);
+  box-shadow: 0 4px 20px rgba(218, 165, 32, 0.35);
+  object-fit: cover;
+}
+
+.reveal-message {
+  font-size: clamp(1rem, 4.5vw, 1.1rem);
+  line-height: 1.8;
+  color: var(--text);
+}
+
+.reveal-firma {
+  font-size: clamp(1.4rem, 7vw, 1.8rem);
+  color: var(--gold-dark);
+}
+
+/* ---------- Fade children (triggered by JS) ---------- */
+.fade-child {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s var(--ease-soft),
+              transform 0.6s var(--ease-soft);
+}
+
+.fade-child.visible {
+  opacity: 1;
+  transform: none;
+}
+
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.35s; }
+.delay-3 { transition-delay: 0.6s; }
+.delay-4 { transition-delay: 0.85s; }
+
+/* ---------- SVG flower animations ---------- */
+
+/* Stem grows up */
+.flower-stem {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  transition: stroke-dashoffset 0.8s var(--ease-soft);
+}
+
+/* Leaf appears — transform-origin set inline by JS (attachment point on stem) */
+.flower-leaf {
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.4s var(--ease-bloom),
+              transform 0.5s var(--ease-bloom);
+}
+
+/* Petal opens — transform-origin/transform-box set inline by JS (per flower center) */
+.flower-petal {
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.35s var(--ease-bloom),
+              transform 0.5s var(--ease-bloom);
+}
+
+/* Center appears */
+.flower-center {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center center;
+  transform: scale(0);
+  transition: opacity 0.4s var(--ease-bloom),
+              transform 0.5s var(--ease-bloom);
+}
+
+/* Bloom state */
+.flower-group.bloomed .flower-stem {
+  stroke-dashoffset: 0;
+}
+
+.flower-group.bloomed .flower-leaf {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.flower-group.bloomed .flower-petal {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.flower-group.bloomed .flower-center {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ---------- Key animations ---------- */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 4px 20px rgba(218, 165, 32, 0.45); }
+  50%       { box-shadow: 0 4px 32px rgba(218, 165, 32, 0.75); }
+}
+
+/* ---------- prefers-reduced-motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.1s !important;
+  }
+
+  .screen {
+    transition: opacity 0.15s;
+  }
+}
+
+/* ---------- Larger screens ---------- */
+@media (min-width: 640px) {
+  .screen-inner {
+    max-width: 480px;
+  }
+
+  .screen-inner {
+    max-width: 480px;
+  }
+}
